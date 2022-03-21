@@ -231,7 +231,7 @@ $mailer->send();
 
 ```
 $mailer->send(function ($mailer,$message) {
-    $mailer->setFrom(''10086@qq.com')
+    $mailer->setFrom('10086@qq.com')
            ->setTo('10086@qq.com')
            ->setSubject('测试邮件')
            ->setTextBody('测试内容');
