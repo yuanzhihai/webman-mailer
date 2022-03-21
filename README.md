@@ -33,10 +33,10 @@ return [
 use yzh52521\mailer\think\Mailer;
 
 $mailer = new Mailer();
-$mailer->from('10086@qq.com@qq.com')
-      ->to('your-mail@domain.com')
-      ->subject('纯文本测试')
-      ->text('欢迎您使用think-mail')
+$mailer->setFrom('10086@qq.com')
+      ->setTo('your-mail@domain.com')
+      ->setSubject('纯文本测试')
+      ->setTextBody('欢迎您使用webman-mailer')
       ->send();
 ```
 
