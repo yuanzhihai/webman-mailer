@@ -1,0 +1,33 @@
+{
+    "name": "yzh52521/webman-mailer",
+    "description": "A powerful and beautiful php mailer in webman Framework  PHP Frameworks based symfony mailer",
+    "keywords": [
+        "webman-mailer",
+        "mailer",
+        "symfony",
+        "mail",
+        "webman"
+    ],
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "yzh52521",
+            "email": "396751927@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0.2",
+        "symfony/mailer": "^6.0",
+        "ext-fileinfo": "*",
+        "topthink/think-template": "^2.0"
+    },
+    "require-dev": {
+        "workerman/webman-framework": "^1.2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "yzh52521\\mailer\\": "src"
+        }
+    }
+}
