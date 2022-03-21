@@ -591,7 +591,7 @@ class Mailer
             $transportInstance->setTransport($transport);
             $mailer = $transportInstance->getSymfonyMailer();
 
-            if (config('mailer.debug')) {
+            if (config('plugin.yzh52521.mailer.app.debug')) {
                 Log::info(var_export($this->getHeadersString(), true));
             }
 
@@ -613,14 +613,14 @@ class Mailer
         } catch (TransportExceptionInterface $e) {
             $this->err_msg = $e->getMessage();
             Log::info($e->getMessage());
-            if (config('mailer.debug')) {
+            if (config('plugin.yzh52521.mailer.app.debug')) {
                 // 调试模式直接抛出异常
                 throw new Exception($e->getMessage());
             }
             return false;
         } catch (Exception $e) {
             $this->err_msg = $e->getMessage();
-            if (config('mailer.debug')) {
+            if (config('plugin.yzh52521.mailer.app.debug')) {
                 // 调试模式直接抛出异常
                 throw new Exception($e->getMessage());
             }
@@ -648,7 +648,7 @@ class Mailer
      */
     protected function embedImage(string &$k, string|array &$v, array &$param)
     {
-        $flag = config('mailer.embed', 'cid:');
+        $flag = config('plugin.yzh52521.mailer.app.embed', 'cid:');
         if (str_contains($k, $flag)) {
             $filename = 'image';
             if (is_array($v) && $v) {
