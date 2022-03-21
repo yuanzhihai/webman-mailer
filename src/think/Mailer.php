@@ -9,6 +9,7 @@
 
 namespace yzh52521\mailer\think;
 
+use support\view\ThinkPHP;
 
 /**
  * Class Mailer
@@ -21,19 +22,16 @@ class Mailer extends \yzh52521\mailer\Mailer
      *
      * @param string $template
      * @param array $param
-     * @param array $config
      *
      * @return Mailer
      */
-    public function view(string $template, array $param = [], array $config = []): Mailer
+    public function view(string $template, array $param = []): Mailer
     {
-        $view = new \think\Template(config('view'));
         // 处理变量中包含有对元数据嵌入的变量
         foreach ($param as $k => $v) {
             $this->embedImage($k, $v, $param);
         }
-        $content = $view->fetch($template, $param);
-
+        $content = ThinkPHP::render($template, $param);
         return $this->setHtmlBody($content);
     }
 }

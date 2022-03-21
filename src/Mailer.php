@@ -495,8 +495,8 @@ class Mailer
     protected function parseParam(array $param, array $config = [])
     {
         $ret            = [];
-        $leftDelimiter  = $config['taglib_begin'] ?: config('view.taglib_begin', '{');
-        $rightDelimiter = $config['tpl_end'] ?: config('view.tpl_end', '}');
+        $leftDelimiter  = !empty($config['taglib_begin']) ?: config('view.option.taglib_begin', '{');
+        $rightDelimiter = !empty($config['tpl_end']) ?: config('view.option.tpl_end', '}');
         foreach ($param as $k => $v) {
             // 处理变量中包含有对元数据嵌入的变量
             $this->embedImage($k, $v, $param);
