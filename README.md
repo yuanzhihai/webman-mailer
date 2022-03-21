@@ -19,9 +19,9 @@ return [
     'host'     => '', // 服务器地址
     'username' => '', //用户名
     'password' => '', // 密码
-    'port'     => 465, // SMTP服务器端口号,一般为25
+    'port'     => 25, // SMTP服务器端口号,一般为25
     'options'  => [], // See: https://symfony.com/doc/current/mailer.html#tls-peer-verification
-    'dsn'      => '',
+    'dsn'      => 'smtp://username:password@smtp.example.com:25', //默认优先使用该配置
     'debug'    => false, // 开启debug模式会直接抛出异常, 记录邮件发送日志
     'embed'    => 'cid:', // 邮件中嵌入图片元数据标记
 ];
@@ -122,9 +122,8 @@ $mailer->view('common@mail/register', ['account' => $account, 'name' => $name]);
 在 `setHtmlBody()` 和 `view()` 方法的第二个参数里, 该数组必须有一个变量, 格式为 `['cid:image_src'] => '/path/to/image.jpg']`
 或者 `['cid:image_src'] => ['file_stream', 'filename','filemime']]`, 即参数数组的键名是上面配置的 `嵌入标签 + 变量名`, 但值有两种情况:
 
-第一, 如果值为字符串, 则该值为图片的路径 (绝对路径或相对路径) 或者 有效的url地址
-第二, 如果值为数组, 数组为 `['stream','name','mime']` 的形式, 其中 `stream` 表示图片的数据流, 即是未保存的文件数据流, 例如 `fopen()` 方法获取的文件数据流,
-第二个参数为文件名, 默认为 `image`,第三个参数可选, 为文件的mime类型, 默认为 null
+第一, 如果值为字符串, 则该值为图片的路径 (绝对路径或相对路径) 或者 有效的url地址 第二, 如果值为数组, 数组为 `['stream','name','mime']` 的形式, 其中 `stream` 表示图片的数据流,
+即是未保存的文件数据流, 例如 `fopen()` 方法获取的文件数据流, 第二个参数为文件名, 默认为 `image`,第三个参数可选, 为文件的mime类型, 默认为 null
 
 #### 示例
 
@@ -249,7 +248,6 @@ $mailer->send(
             'dsn'      => '']
             );
 ```
-
 
 开启 `debug` 模式后, 邮件发送失败会直接以异常抛出, 如果没有开启, 可以通过 `getError()` 获取错误信息
 
