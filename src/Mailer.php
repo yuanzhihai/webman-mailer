@@ -570,12 +570,12 @@ class Mailer
 
     /**
      * 发送邮件
-     * @param null $message
+     * @param \Closure|null $message
      * @param array $transport
      * @return bool
      * @throws \Exception
      */
-    public function send($message = null, array $transport = []): bool
+    public function send(\Closure $message = null, array $transport = []): bool
     {
         try {
             // 匿名函数
