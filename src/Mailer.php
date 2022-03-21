@@ -571,12 +571,11 @@ class Mailer
     /**
      * 发送邮件
      * @param null $message
-     * @param array|object $transport
-     * @param \Closure|null $send
+     * @param array $transport
      * @return bool
      * @throws \Exception
      */
-    public function send($message = null, array $transport = [], \Closure $send = null): bool
+    public function send($message = null, array $transport = []): bool
     {
         try {
             // 匿名函数
@@ -588,13 +587,9 @@ class Mailer
                 $transport = $this->transport;
             }
 
-            if ($transport instanceof TransportInterface) {
-                $mailer = $transport;
-            } else {
-                $transportInstance = new Transport();
-                $transportInstance->setTransport($transport);
-                $mailer = $transportInstance->getSymfonyMailer();
-            }
+            $transportInstance = new Transport();
+            $transportInstance->setTransport($transport);
+            $mailer = $transportInstance->getSymfonyMailer();
 
             if (config('mailer.debug')) {
                 Log::info(var_export($this->getHeadersString(), true));
@@ -613,11 +608,7 @@ class Mailer
             }
 
             // 发送邮件
-            if ($send instanceof \Closure) {
-                call_user_func_array($send, [$mailer, $this]);
-            } else {
-                $mailer->send($message);
-            }
+            $mailer->send($message);
             return true;
         } catch (TransportExceptionInterface $e) {
             $this->err_msg = $e->getMessage();
