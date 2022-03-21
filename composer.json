@@ -22,7 +22,6 @@
         "ext-fileinfo": "*"
     },
     "require-dev": {
-        "topthink/think-template": "^2.0",
         "workerman/webman-framework": "^1.2.1"
     },
     "autoload": {
