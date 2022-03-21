@@ -140,7 +140,7 @@ $mailer->view('common@mail/register', ['account' => $account, 'name' => $name]);
 $mailer->setForm('10086@qq.com')
        ->setTo('10086@qq.com') 
        ->setSubject('测试邮件模板中嵌入图片元数据')
-       ->view('index@mail/index', [
+       ->view('mail/index', [
         'date' => date('Y-m-d H:i:s'),     
         'cid:image' => '/path/to/images/image.jpg',
         // 'cid:image' => '/path/to/images/image.jpg',
