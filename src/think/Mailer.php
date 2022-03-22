@@ -22,16 +22,16 @@ class Mailer extends \yzh52521\mailer\Mailer
      *
      * @param string $template
      * @param array $param
-     *
+     * @param string $app
      * @return Mailer
      */
-    public function view(string $template, array $param = []): Mailer
+    public function view(string $template, array $param = [], string $app = ''): Mailer
     {
         // 处理变量中包含有对元数据嵌入的变量
         foreach ($param as $k => $v) {
             $this->embedImage($k, $v, $param);
         }
-        $content = ThinkPHP::render($template, $param);
+        $content = ThinkPHP::render($template, $param, $app);
         return $this->setHtmlBody($content);
     }
 }
