@@ -26,7 +26,7 @@ use yzh52521\mailer\exception\Exception;
 /**
  * Class Mailer
  * @package yzh52521\mailer
- * @method Mailer view(string $template, array $param = [], array $config = [])
+ * @method Mailer view(string $template, array $param = [], string $app='')
  */
 class Mailer
 {
