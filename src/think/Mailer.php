@@ -32,6 +32,7 @@ class Mailer extends \yzh52521\mailer\Mailer
             $this->embedImage($k, $v, $param);
         }
         $content = ThinkPHP::render($template, $param, $app);
+
         return $this->setHtmlBody($content);
     }
 }
