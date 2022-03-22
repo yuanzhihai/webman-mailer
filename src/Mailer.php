@@ -15,7 +15,6 @@ use JetBrains\PhpStorm\Pure;
 use support\Log;
 use Symfony\Component\Mailer\Exception\RuntimeException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Crypto\DkimSigner;
 use Symfony\Component\Mime\Crypto\SMimeEncrypter;
@@ -31,6 +30,8 @@ use yzh52521\mailer\exception\Exception;
  */
 class Mailer
 {
+
+    protected static $instance = null;
 
     private string $charset = 'utf-8';
     /**
@@ -58,6 +59,15 @@ class Mailer
     {
         $this->transport = $transport;
         $this->message   = new Email();
+    }
+
+
+    public static function instance($transport = [])
+    {
+        if (!static::$instance) {
+            static::$instance = new static($transport);
+        }
+        return static::$instance;
     }
 
     public function __clone()
