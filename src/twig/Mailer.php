@@ -33,6 +33,6 @@ class Mailer extends \yzh52521\mailer\Mailer
         }
         $content = Twig::render($template, $param, $app);
 
-        return $this->setHtmlBody($content, [], ['tpl_begin' => '{{', 'tpl_end' => '}}']);
+        return $this->setHtmlBody($content);
     }
 }
