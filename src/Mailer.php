@@ -64,10 +64,10 @@ class Mailer
 
     public static function instance($transport = [])
     {
-        if (!static::$instance) {
-            static::$instance = new static($transport);
+        if (!self::$instance) {
+            self::$instance = new static($transport);
         }
-        return static::$instance;
+        return self::$instance;
     }
 
     public function __clone()
