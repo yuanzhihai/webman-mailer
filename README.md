@@ -39,7 +39,7 @@ return [
 ## 优雅的发送邮件
 
 ```
-use yzh52521\mailer\think\Mailer;
+use yzh52521\mailer\think\Mailer; 
 
 Mailer::instance()
       ->setFrom('10086@qq.com')
@@ -145,7 +145,24 @@ $mailer->setHtmlBody('<p>欢迎使用{name}</p>', ['name' => 'webman-mailer']);
 
 ### 设置邮件内容 - 模板
 
-ThinkPHP模板, 具体请看ThinkPHP框架的模板怎么用, 第二个参数是要进行模板赋值的数组
+使用不同的模版 use 不同的类
+```
+think-template 模版引擎
+
+use yzh52521\mailer\think\Mailer;
+
+Twig 模版引擎
+use yzh52521\mailer\twig\Mailer;
+
+Blade 模版引擎
+use yzh52521\mailer\blade\Mailer;
+```
+
+模板的使用, 具体请看webman视图怎么用, 第二个参数是要进行模板赋值的数组
+
+https://www.workerman.net/doc/webman/view.html
+
+以下介绍的是thinkphp模版使用
 
 ```
 $mailer->view('mail/register');
