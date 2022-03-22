@@ -571,7 +571,7 @@ class Mailer
     protected function parseParam(array $param, array $config = [])
     {
         $ret            = [];
-        $leftDelimiter  = !empty($config['taglib_begin']) ?: config('view.option.taglib_begin', '{');
+        $leftDelimiter  = !empty($config['tpl_begin']) ?: config('view.option.tpl_begin', '{');
         $rightDelimiter = !empty($config['tpl_end']) ?: config('view.option.tpl_end', '}');
         foreach ($param as $k => $v) {
             // 处理变量中包含有对元数据嵌入的变量
