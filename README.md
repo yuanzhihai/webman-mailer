@@ -41,8 +41,8 @@ return [
 ```
 use yzh52521\mailer\think\Mailer;
 
-$mailer = new Mailer();
-$mailer->setFrom('10086@qq.com')
+Mailer::instance()
+      ->setFrom('10086@qq.com')
       ->setTo('your-mail@domain.com')
       ->setSubject('纯文本测试')
       ->setTextBody('欢迎您使用webman-mailer')
@@ -55,6 +55,8 @@ $mailer->setFrom('10086@qq.com')
 
 ```
 $mailer = new Mailer();
+or 
+$mailer = Mailer::instance();
 ```
 
 ### 设置发件人
@@ -203,7 +205,8 @@ $mailer->attachContent(fopen('/path/to/documents/contract.doc', 'r'), ['fileName
 
 ```
 
-###设置消息加密/签名
+### 设置消息加密/签名
+
 ```
 消息加密
 $encryptor=new SMimeEncrypter('/path/to/certificate.crt');
