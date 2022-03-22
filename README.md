@@ -65,6 +65,10 @@ $mailer = Mailer::instance();
 
 ```
 $mailer->setFrom('10086@qq.com');
+$mailer->setFrom(['10086@qq.com'=>'发件人']);
+or
+$mailer->addFrom('10086@qq.com');
+$mailer->addFrom(['10086@qq.com'=>'发件人']);
 ```
 
 ### 设置收件人
@@ -72,9 +76,45 @@ $mailer->setFrom('10086@qq.com');
 以下几种方式任选一种
 
 ```
-$mailer->setTo(['10086@qq.com']);
 $mailer->setTo('10086@qq.com');
 $mailer->setTo(['tianpian0805@qq.com', '10086@qq.com']);
+or
+$mailer->addTo('10086@qq.com');
+$mailer->addTo(['tianpian0805@qq.com', '10086@qq.com']);
+```
+### 设置抄送
+
+以下几种方式任选一种
+
+```
+$mailer->setCc('10086@qq.com');
+$mailer->setCc(['tianpian0805@qq.com', '10086@qq.com']);
+or
+$mailer->addCc('10086@qq.com');
+$mailer->addCc(['tianpian0805@qq.com', '10086@qq.com']);
+```
+
+### 设置暗抄送
+
+以下几种方式任选一种
+
+```
+$mailer->setBcc('10086@qq.com');
+$mailer->setBcc(['tianpian0805@qq.com', '10086@qq.com']);
+or
+$mailer->addBcc('10086@qq.com');
+$mailer->addBcc(['tianpian0805@qq.com', '10086@qq.com']);
+```
+
+
+### 设置回复邮件地址
+```
+$mailer->setReplyTo(['10086@qq.com']);
+$mailer->setReplyTo('10086@qq.com');
+or
+
+$mailer->addReplyTo(['10086@qq.com']);
+$mailer->addReplyTo('10086@qq.com');
 ```
 
 ### 设置邮件主题

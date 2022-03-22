@@ -159,6 +159,20 @@ class Mailer
     }
 
     /**
+     * 设置发件人
+     *
+     * @param array|string $address
+     *
+     * @return $this
+     */
+    public function addFrom(array|string $address): self
+    {
+        $this->message->addFrom(...$this->convertStringsToAddresses($address));
+
+        return $this;
+    }
+
+    /**
      * 获取发件人
      * @return array|string
      */
@@ -177,6 +191,20 @@ class Mailer
     public function setTo(array|string $address): self
     {
         $this->message->to(...$this->convertStringsToAddresses($address));
+
+        return $this;
+    }
+
+    /**
+     * 设置收件人
+     *
+     * @param array|string $address
+     *
+     * @return $this
+     */
+    public function addTo(array|string $address): self
+    {
+        $this->message->addTo(...$this->convertStringsToAddresses($address));
 
         return $this;
     }
@@ -204,6 +232,19 @@ class Mailer
     }
 
     /**
+     * 设置抄送人
+     *
+     * @param array|string $address
+     * @return $this
+     */
+    public function addCc(array|string $address): self
+    {
+        $this->message->addCc(...$this->convertStringsToAddresses($address));
+
+        return $this;
+    }
+
+    /**
      * 获取抄送人
      * @return string|array
      */
@@ -220,6 +261,18 @@ class Mailer
     public function setBcc(array|string $address): self
     {
         $this->message->bcc(...$this->convertStringsToAddresses($address));
+
+        return $this;
+    }
+
+    /**
+     * 设置暗抄人
+     * @param array|string $address
+     * @return $this
+     */
+    public function addBcc(array|string $address): self
+    {
+        $this->message->addBcc(...$this->convertStringsToAddresses($address));
 
         return $this;
     }
@@ -419,7 +472,19 @@ class Mailer
      */
     public function setReplyTo(array|string $address): self
     {
-        $this->message->replyTo($address);
+        $this->message->replyTo(...$this->convertStringsToAddresses($address));
+
+        return $this;
+    }
+
+    /**
+     * 设置回复邮件
+     * @param array|string $address
+     * @return $this
+     */
+    public function addReplyTo(array|string $address): self
+    {
+        $this->message->addReplyTo(...$this->convertStringsToAddresses($address));
 
         return $this;
     }
@@ -443,6 +508,7 @@ class Mailer
     public function setReturnPath(string $address): self
     {
         $this->message->returnPath($address);
+
         return $this;
     }
 
