@@ -466,7 +466,7 @@ class Mailer
     }
 
     /**
-     * 设置回复邮件
+     * 设置回复邮件地址
      * @param array|string $address
      * @return $this
      */
@@ -478,7 +478,7 @@ class Mailer
     }
 
     /**
-     * 设置回复邮件
+     * 设置回复邮件地址
      * @param array|string $address
      * @return $this
      */
@@ -489,6 +489,10 @@ class Mailer
         return $this;
     }
 
+    /**
+     * 获取回复邮件地址
+     * @return array|string
+     */
     public function getReplyTo(): array|string
     {
         return $this->convertAddressesToStrings($this->message->getReplyTo());
@@ -588,7 +592,7 @@ class Mailer
      *
      * @param SMimeEncrypter $encryptor The encryptor instance.
      *
-     * @return self
+     * @return $this
      * @see https://symfony.com/doc/current/mailer.html#encrypting-messages
      *
      */
@@ -605,7 +609,7 @@ class Mailer
      * @param DkimSigner|SMimeSigner|object $signer The signer instance.
      * @param array $options The options for DKIM signer {@see DkimSigner}.
      *
-     * @return self
+     * @return $this
      * @throws RuntimeException If the signer is not an instance of {@see DkimSigner} or {@see SMimeSigner}.
      *
      * @see https://symfony.com/doc/current/mailer.html#signing-messages
