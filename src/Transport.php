@@ -6,6 +6,7 @@
  * @copyright 2022 yzh52521 all rights reserved.
  * @license   http://www.apache.org/licenses/LICENSE-2.0
  */
+declare (strict_types=1);
 
 namespace yzh52521\mailer;
 
@@ -25,7 +26,10 @@ class Transport
      */
     private $_transport = [];
 
-    private ?SymfonyMailer $symfonyMailer = null;
+    /**
+     * @var SymfonyMailer|null
+     */
+    private $symfonyMailer = null;
 
     /**
      * Creates Symfony mailer instance.
@@ -78,7 +82,7 @@ class Transport
 
     private function createTransport(array $config = []): TransportInterface
     {
-        $config           = array_merge(config('plugin.yzh52521.mailer.app'), $config);
+        $config           = array_merge(config('plugin.yzh52521.mailer.app.mailer'), $config);
         $defaultFactories = \Symfony\Component\Mailer\Transport::getDefaultFactories(null, null, null);
         $transportObj     = new \Symfony\Component\Mailer\Transport($defaultFactories);
 

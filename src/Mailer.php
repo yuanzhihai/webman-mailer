@@ -6,12 +6,12 @@
  * @copyright 2022 yzh52521 all rights reserved.
  * @license   http://www.apache.org/licenses/LICENSE-2.0
  */
+declare (strict_types=1);
 
 namespace yzh52521\mailer;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use JetBrains\PhpStorm\Pure;
 use support\Log;
 use Symfony\Component\Mailer\Exception\RuntimeException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -26,33 +26,33 @@ use yzh52521\mailer\exception\Exception;
 /**
  * Class Mailer
  * @package yzh52521\mailer
- * @method Mailer view(string $template, array $param = [], string $app='')
+ * @method Mailer view(string $template, array $param = [], string $app = '')
  */
 class Mailer
 {
 
     protected static $instance = null;
 
-    private string $charset = 'utf-8';
+    private $charset = 'utf-8';
     /**
      * @var Email
      */
-    protected Email $message;
+    protected $message;
 
     /**
      * @var string|null 错误信息
      */
-    protected ?string $err_msg;
+    protected $err_msg;
 
     /**
      * @var DkimSigner|SMimeSigner|null
      */
-    private SMimeSigner|DkimSigner|null $signer = null;
-    private array $dkimSignerOptions = [];
+    private $signer = null;
+    private $dkimSignerOptions = [];
 
-    private ?SMimeEncrypter $encryptor = null;
+    private $encryptor = null;
 
-    private mixed $transport;
+    private $transport = [];
 
 
     public function __construct($transport = [])
@@ -151,7 +151,7 @@ class Mailer
      *
      * @return $this
      */
-    public function setFrom(array|string $address): self
+    public function setFrom($address): self
     {
         $this->message->from(...$this->convertStringsToAddresses($address));
 
@@ -165,7 +165,7 @@ class Mailer
      *
      * @return $this
      */
-    public function addFrom(array|string $address): self
+    public function addFrom($address): self
     {
         $this->message->addFrom(...$this->convertStringsToAddresses($address));
 
@@ -176,7 +176,7 @@ class Mailer
      * 获取发件人
      * @return array|string
      */
-    public function getFrom(): array|string
+    public function getFrom()
     {
         return $this->convertAddressesToStrings($this->message->getFrom());
     }
@@ -188,7 +188,7 @@ class Mailer
      *
      * @return $this
      */
-    public function setTo(array|string $address): self
+    public function setTo($address): self
     {
         $this->message->to(...$this->convertStringsToAddresses($address));
 
@@ -202,7 +202,7 @@ class Mailer
      *
      * @return $this
      */
-    public function addTo(array|string $address): self
+    public function addTo($address): self
     {
         $this->message->addTo(...$this->convertStringsToAddresses($address));
 
@@ -213,7 +213,7 @@ class Mailer
      * 获取收件人
      * @return string|array
      */
-    public function getTo(): array|string
+    public function getTo()
     {
         return $this->convertAddressesToStrings($this->message->getTo());
     }
@@ -224,7 +224,7 @@ class Mailer
      * @param array|string $address
      * @return $this
      */
-    public function setCc(array|string $address): self
+    public function setCc($address): self
     {
         $this->message->cc(...$this->convertStringsToAddresses($address));
 
@@ -237,7 +237,7 @@ class Mailer
      * @param array|string $address
      * @return $this
      */
-    public function addCc(array|string $address): self
+    public function addCc($address): self
     {
         $this->message->addCc(...$this->convertStringsToAddresses($address));
 
@@ -248,7 +248,7 @@ class Mailer
      * 获取抄送人
      * @return string|array
      */
-    public function getCc(): array|string
+    public function getCc()
     {
         return $this->convertAddressesToStrings($this->message->getCc());
     }
@@ -258,7 +258,7 @@ class Mailer
      * @param array|string $address
      * @return $this
      */
-    public function setBcc(array|string $address): self
+    public function setBcc($address): self
     {
         $this->message->bcc(...$this->convertStringsToAddresses($address));
 
@@ -270,7 +270,7 @@ class Mailer
      * @param array|string $address
      * @return $this
      */
-    public function addBcc(array|string $address): self
+    public function addBcc($address): self
     {
         $this->message->addBcc(...$this->convertStringsToAddresses($address));
 
@@ -282,7 +282,7 @@ class Mailer
      *
      * @return array|string
      */
-    public function getBcc(): array|string
+    public function getBcc()
     {
         return $this->convertAddressesToStrings($this->message->getBcc());
     }
@@ -291,7 +291,6 @@ class Mailer
      * 获取邮件HTML内容
      * @return string
      */
-    #[Pure]
     public function getHtmlBody(): string
     {
         return (string)$this->message->getHtmlBody();
@@ -365,7 +364,6 @@ class Mailer
     /**
      * @return string
      */
-    #[Pure]
     public function getTextBody(): string
     {
         return (string)$this->message->getTextBody();
@@ -470,7 +468,7 @@ class Mailer
      * @param array|string $address
      * @return $this
      */
-    public function setReplyTo(array|string $address): self
+    public function setReplyTo($address): self
     {
         $this->message->replyTo(...$this->convertStringsToAddresses($address));
 
@@ -482,7 +480,7 @@ class Mailer
      * @param array|string $address
      * @return $this
      */
-    public function addReplyTo(array|string $address): self
+    public function addReplyTo($address): self
     {
         $this->message->addReplyTo(...$this->convertStringsToAddresses($address));
 
@@ -493,7 +491,7 @@ class Mailer
      * 获取回复邮件地址
      * @return array|string
      */
-    public function getReplyTo(): array|string
+    public function getReplyTo()
     {
         return $this->convertAddressesToStrings($this->message->getReplyTo());
     }
@@ -634,7 +632,7 @@ class Mailer
             'The signer must be an instance of "%s" or "%s". The "%s" instance is received.',
             DkimSigner::class,
             SMimeSigner::class,
-            get_class($signer),
+            get_class($signer)
         ));
     }
 
@@ -671,7 +669,7 @@ class Mailer
             $transportInstance->setTransport($transport);
             $mailer = $transportInstance->getSymfonyMailer();
 
-            if (config('plugin.yzh52521.mailer.app.debug')) {
+            if (config('plugin.yzh52521.mailer.app.mailer.debug')) {
                 Log::info(var_export($this->getHeadersString(), true));
             }
 
@@ -693,14 +691,14 @@ class Mailer
         } catch (TransportExceptionInterface $e) {
             $this->err_msg = $e->getMessage();
             Log::info($e->getMessage());
-            if (config('plugin.yzh52521.mailer.app.debug')) {
+            if (config('plugin.yzh52521.mailer.app.mailer.debug')) {
                 // 调试模式直接抛出异常
                 throw new Exception($e->getMessage());
             }
             return false;
         } catch (Exception $e) {
             $this->err_msg = $e->getMessage();
-            if (config('plugin.yzh52521.mailer.app.debug')) {
+            if (config('plugin.yzh52521.mailer.app.mailer.debug')) {
                 // 调试模式直接抛出异常
                 throw new Exception($e->getMessage());
             }
@@ -726,10 +724,10 @@ class Mailer
      * @param string|array $v
      * @param array $param
      */
-    protected function embedImage(string &$k, string|array &$v, array &$param)
+    protected function embedImage(string &$k, &$v, array &$param)
     {
-        $flag = config('plugin.yzh52521.mailer.app.embed', 'cid:');
-        if (str_contains($k, $flag)) {
+        $flag = config('plugin.yzh52521.mailer.app.mailer.embed', 'cid:');
+        if (false !== strpos($k, $flag)) {
             $filename = 'image';
             if (is_array($v) && $v) {
                 if (!isset($v[1])) {
@@ -756,8 +754,7 @@ class Mailer
      *
      * @return array<string, string>|string
      */
-    #[Pure]
-    private function convertAddressesToStrings(array $addresses): array|string
+    private function convertAddressesToStrings(array $addresses)
     {
         $strings = [];
 
@@ -775,7 +772,7 @@ class Mailer
      *
      * @return Address[]
      */
-    private function convertStringsToAddresses(array|string $strings): array
+    private function convertStringsToAddresses($strings): array
     {
         if (is_string($strings)) {
             return [new Address($strings)];
