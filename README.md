@@ -15,23 +15,27 @@ composer require yzh52521/webman-mailer
 ```
 return [
     'enable'   => true,
-    'scheme'   => 'smtp',// "smtps": using TLS, "smtp": without using TLS.
-    'host'     => '', // 服务器地址
-    'username' => '', //用户名
-    'password' => '', // 密码
-    'port'     => 25, // SMTP服务器端口号,一般为25
-    'options'  => [], // See: https://symfony.com/doc/current/mailer.html#tls-peer-verification
-    'debug'    => false, // 开启debug模式会直接抛出异常, 记录邮件发送日志
-    'embed'    => 'cid:', // 邮件中嵌入图片元数据标记
+    'mailer'   =>[
+        'scheme'   => 'smtp',// "smtps": using TLS, "smtp": without using TLS.
+        'host'     => '', // 服务器地址
+        'username' => '', //用户名
+        'password' => '', // 密码
+        'port'     => 25, // SMTP服务器端口号,一般为25
+        'options'  => [], // See: https://symfony.com/doc/current/mailer.html#tls-peer-verification
+        'debug'    => false, // 开启debug模式会直接抛出异常, 记录邮件发送日志
+        'embed'    => 'cid:', // 邮件中嵌入图片元数据标记
+    ]
 ];
 
 or
 
 return [
     'enable'   => true,
-    'dsn'      => 'smtp://username:password@smtp.example.com:25', //默认优先使用该配置
-    'debug'    => false, // 开启debug模式会直接抛出异常, 记录邮件发送日志
-    'embed'    => 'cid:', // 邮件中嵌入图片元数据标记
+    'mailer'   =>[
+        'dsn'      => 'smtp://username:password@smtp.example.com:25', //默认优先使用该配置
+        'debug'    => false, // 开启debug模式会直接抛出异常, 记录邮件发送日志
+        'embed'    => 'cid:', // 邮件中嵌入图片元数据标记
+    ]
 ];
 
 ```
@@ -82,6 +86,7 @@ or
 $mailer->addTo('10086@qq.com');
 $mailer->addTo(['tianpian0805@qq.com', '10086@qq.com']);
 ```
+
 ### 设置抄送
 
 以下几种方式任选一种
@@ -106,8 +111,8 @@ $mailer->addBcc('10086@qq.com');
 $mailer->addBcc(['tianpian0805@qq.com', '10086@qq.com']);
 ```
 
-
 ### 设置回复邮件地址
+
 ```
 $mailer->setReplyTo(['10086@qq.com']);
 $mailer->setReplyTo('10086@qq.com');
@@ -146,6 +151,7 @@ $mailer->setHtmlBody('<p>欢迎使用{name}</p>', ['name' => 'webman-mailer']);
 ### 设置邮件内容 - 模板
 
 使用不同的模版 use 不同的类
+
 ```
 think-template 模版引擎
 
