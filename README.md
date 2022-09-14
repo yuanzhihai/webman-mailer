@@ -51,8 +51,7 @@ return [
 ```
 use yzh52521\mailer\Mailer; 
 
-Mailer::instance()
-      ->setFrom('10086@qq.com')
+Mailer::setFrom('10086@qq.com')
       ->setTo('your-mail@domain.com')
       ->setSubject('纯文本测试')
       ->setTextBody('欢迎您使用webman-mailer')
@@ -65,8 +64,6 @@ Mailer::instance()
 
 ```
 $mailer = new Mailer();
-or 
-$mailer = Mailer::instance();
 ```
 
 ### 设置发件人
@@ -323,12 +320,12 @@ $mailer->send(
            ->setSubject('测试邮件')
            ->setTextBody('测试内容');
             },
-            ['scheme'=>'',
-            'host'     => '', // 服务器地址
-            'username' => '', //用户名
-            'password' => '', // 密码
-            'port'     => 465, // SMTP服务器端口号,一般为25
-            'options'  => [], // See: https://symfony.com/doc/current/mailer.html#tls-peer-verification
+            [
+                'scheme'=>'',
+                'host'     => '', // 服务器地址
+                'username' => '', //用户名
+                'password' => '', // 密码
+                'port'     => 465, // SMTP服务器端口号,一般为25
             ]
             );
 ```
