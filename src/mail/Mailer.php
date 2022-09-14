@@ -62,7 +62,7 @@ class Mailer
         $config          = config('plugin.yzh52521.mailer.app');
         $this->transport = $transport;
         $this->debug     = $config['mailer']['debug'];
-        $this->from      = [$config['from'][0]['address'] => $config['from'][0]['name']];
+        $this->from      = [$config['from']['address'] => $config['from']['name']];
         $this->message   = new Email();
     }
 
@@ -419,7 +419,7 @@ class Mailer
      * @param string $app
      * @return $this
      */
-    public function view(string $template, array $param = [], string $app = null): Mailer
+    public function view(string $template, array $param = [], string $app = ''): Mailer
     {
         // 处理变量中包含有对元数据嵌入的变量
         foreach ( $param as $k => $v ) {
