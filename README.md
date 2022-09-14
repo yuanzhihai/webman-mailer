@@ -23,8 +23,11 @@ return [
         'port'     => 25, // SMTP服务器端口号,一般为25
         'options'  => [], // See: https://symfony.com/doc/current/mailer.html#tls-peer-verification
         'debug'    => false, // 开启debug模式会直接抛出异常, 记录邮件发送日志
-        'embed'    => 'cid:', // 邮件中嵌入图片元数据标记
-    ]
+    ],
+    'from'   => [
+        'address' => 'hello@example.com',
+        'name'    => 'Example',
+    ],
 ];
 
 or
@@ -33,9 +36,12 @@ return [
     'enable'   => true,
     'mailer'   =>[
         'dsn'      => 'smtp://username:password@smtp.example.com:25', //默认优先使用该配置
-        'debug'    => false, // 开启debug模式会直接抛出异常, 记录邮件发送日志
-        'embed'    => 'cid:', // 邮件中嵌入图片元数据标记
-    ]
+        'debug'    => false, // 开启debug模式会直接抛出异常, 记录邮件发送日志    
+    ],
+    'from'   => [
+        'address' => 'hello@example.com',
+        'name'    => 'Example',
+    ],
 ];
 
 ```
@@ -43,7 +49,7 @@ return [
 ## 优雅的发送邮件
 
 ```
-use yzh52521\mailer\think\Mailer; 
+use yzh52521\mailer\Mailer; 
 
 Mailer::instance()
       ->setFrom('10086@qq.com')
@@ -149,20 +155,6 @@ $mailer->setHtmlBody('<p>欢迎使用{name}</p>', ['name' => 'webman-mailer']);
 ```
 
 ### 设置邮件内容 - 模板
-
-使用不同的模版 use 不同的类
-
-```
-think-template 模版引擎
-
-use yzh52521\mailer\think\Mailer;
-
-Twig 模版引擎
-use yzh52521\mailer\twig\Mailer;
-
-Blade 模版引擎
-use yzh52521\mailer\blade\Mailer;
-```
 
 模板的使用, 具体请看webman视图怎么用, 第二个参数是要进行模板赋值的数组
 
@@ -337,7 +329,7 @@ $mailer->send(
             'password' => '', // 密码
             'port'     => 465, // SMTP服务器端口号,一般为25
             'options'  => [], // See: https://symfony.com/doc/current/mailer.html#tls-peer-verification
-            'dsn'      => '']
+            ]
             );
 ```
 

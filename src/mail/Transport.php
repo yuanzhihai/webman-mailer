@@ -8,7 +8,7 @@
  */
 declare (strict_types=1);
 
-namespace yzh52521\mailer;
+namespace yzh52521\mailer\mail;
 
 use Symfony\Component\Mailer\Mailer as SymfonyMailer;
 use Symfony\Component\Mailer\Transport\Dsn;
