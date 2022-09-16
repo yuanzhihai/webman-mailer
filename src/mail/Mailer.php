@@ -46,6 +46,11 @@ class Mailer
     /** @var array|string 发信人 */
     protected $from = [];
 
+    protected $html;
+
+    protected $text;
+
+
     /**
      * @var DkimSigner|SMimeSigner|null
      */
@@ -138,6 +143,7 @@ class Mailer
     public function setDate(DateTimeInterface $date): self
     {
         $this->message->date($date);
+
         return $this;
     }
 
@@ -367,16 +373,20 @@ class Mailer
      */
     public function setHtmlBody(string $content, array $param = [], array $config = []): self
     {
+        $this->html = $content;
+
         if ( $param ) {
             $content = strtr($content, $this->parseParam($param, $config));
         }
         $this->message->html($content, $this->charset);
+
 
         return $this;
     }
 
 
     /**
+     * 获取邮件内容为纯文本内容
      * @return string
      */
     public function getTextBody(): string
@@ -395,6 +405,8 @@ class Mailer
      */
     public function setTextBody(string $content, array $param = [], array $config = []): self
     {
+        $this->text = $content;
+
         if ( $param ) {
             $content = strtr($content, $this->parseParam($param, $config));
         }
@@ -751,6 +763,16 @@ class Mailer
     {
         $this->debug = $debug;
         return $this;
+    }
+
+
+    /**
+     * 获取邮件内容
+     * @return string
+     */
+    public function render(): string
+    {
+        return $this->html ? $this->getHtmlBody() : $this->getTextBody();
     }
 
 
