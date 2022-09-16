@@ -44,7 +44,7 @@ class Mailer
     protected bool $debug = false;
 
     /** @var array|string 发信人 */
-    protected $from;
+    protected $from = [];
 
     /**
      * @var DkimSigner|SMimeSigner|null
@@ -62,7 +62,7 @@ class Mailer
         $config          = config('plugin.yzh52521.mailer.app');
         $this->transport = $transport;
         $this->debug     = $config['mailer']['debug'];
-        $this->from      = [$config['from']['address'] => $config['from']['name']];
+        $this->from      = $config['from'];
         $this->message   = new Email();
     }
 
@@ -146,12 +146,13 @@ class Mailer
      * 设置发件人
      *
      * @param array|string $address
+     * @param string $name
      *
      * @return $this
      */
-    public function setFrom($address): self
+    public function setFrom($address, $name = null): self
     {
-        $this->from = $address;
+        $this->from = compact('address', 'name');
 
         return $this;
     }
@@ -160,12 +161,13 @@ class Mailer
      * 设置发件人
      *
      * @param array|string $address
+     * @param string $name
      *
      * @return $this
      */
-    protected function addFrom($address): self
+    protected function addFrom($address, $name = null): self
     {
-        $this->from = $address;
+        $this->from = compact('address', 'name');
 
         return $this;
     }
@@ -177,10 +179,12 @@ class Mailer
     protected function buildFrom(): self
     {
         if ( !empty($this->from) ) {
-            $this->message->from(...$this->convertStringsToAddresses($this->from));
+            $address = $this->from[0]['address'];
+            $name    = $this->from[0]['name'];
+            is_array($address)
+                ? $this->message->from(...$address)
+                : $this->message->from(new Address($address, (string)$name));
         }
-
-        return $this;
     }
 
     /**
