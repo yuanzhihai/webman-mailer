@@ -2,6 +2,10 @@
 
 namespace yzh52521\mailer;
 
+/**
+ * @see \yzh52521\mailer\mail\Mailer
+ * @mixin \yzh52521\mailer\mail\Mailer
+ */
 class Mailer
 {
     public static $_instance = null;
