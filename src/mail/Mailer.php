@@ -67,7 +67,7 @@ class Mailer
         $config          = config('plugin.yzh52521.mailer.app');
         $this->transport = $transport;
         $this->debug     = $config['mailer']['debug'];
-        $this->from      = $config['from'];
+        $this->from      = [$config['from']['address'] => $config['from']['name']];
         $this->message   = new Email();
     }
 
@@ -152,13 +152,12 @@ class Mailer
      * 设置发件人
      *
      * @param array|string $address
-     * @param string $name
      *
      * @return $this
      */
-    public function setFrom($address, $name = null): self
+    public function setFrom($address): self
     {
-        $this->from = compact('address', 'name');
+        $this->from = $address;
 
         return $this;
     }
@@ -167,13 +166,12 @@ class Mailer
      * 设置发件人
      *
      * @param array|string $address
-     * @param string $name
      *
      * @return $this
      */
-    protected function addFrom($address, $name = null): self
+    protected function addFrom($address): self
     {
-        $this->from = compact('address', 'name');
+        $this->from = $address;
 
         return $this;
     }
@@ -182,14 +180,10 @@ class Mailer
      * 设置 发件人
      * @return $this
      */
-    protected function buildFrom(): self
+    protected function buildFrom()
     {
         if ( !empty($this->from) ) {
-            $address = $this->from[0]['address'];
-            $name    = $this->from[0]['name'];
-            is_array($address)
-                ? $this->message->from(...$address)
-                : $this->message->from(new Address($address, (string)$name));
+            $this->message->from(...$this->convertStringsToAddresses($this->from));
         }
     }
 
