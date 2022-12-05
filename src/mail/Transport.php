@@ -22,9 +22,9 @@ use yzh52521\mailer\exception\InvalidArgumentException;
 class Transport
 {
     /**
-     * @var TransportInterface|array Symfony transport instance or its array configuration.
+     * @var array|TransportInterface|null Symfony transport instance or its array configuration.
      */
-    private $_transport = [];
+    private $_transport = null;
 
     /**
      * @var SymfonyMailer|null
@@ -71,11 +71,8 @@ class Transport
         if (!is_array($transport) && !$transport instanceof TransportInterface) {
             throw new InvalidArgumentException('"' . get_class($this) . '::transport" should be either object or array, "' . gettype($transport) . '" given.');
         }
-        if ($transport instanceof TransportInterface) {
-            $this->_transport = $transport;
-        } elseif (is_array($transport)) {
-            $this->_transport = $this->createTransport($transport);
-        }
+
+        $this->_transport = $transport instanceof TransportInterface ? $transport : $this->createTransport( $transport );
 
         $this->symfonyMailer = null;
     }
@@ -83,7 +80,7 @@ class Transport
     private function createTransport(array $config = []): TransportInterface
     {
         $config           = array_merge(config('plugin.yzh52521.mailer.app.mailer'), $config);
-        $defaultFactories = \Symfony\Component\Mailer\Transport::getDefaultFactories(null, null, null);
+        $defaultFactories = \Symfony\Component\Mailer\Transport::getDefaultFactories();
         $transportObj     = new \Symfony\Component\Mailer\Transport($defaultFactories);
 
         if (array_key_exists('dsn', $config)) {
@@ -94,7 +91,7 @@ class Transport
                 $config['host'],
                 $config['username'] ?? '',
                 $config['password'] ?? '',
-                $config['port'] ?? '',
+                $config['port'] ?? null,
                 $config['options'] ?? [],
             );
             $transport = $transportObj->fromDsnObject($dsn);

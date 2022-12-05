@@ -13,12 +13,8 @@ namespace yzh52521\mailer\mail;
 use DateTimeImmutable;
 use DateTimeInterface;
 use support\Log;
-use Symfony\Component\Mailer\Exception\RuntimeException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Crypto\DkimSigner;
-use Symfony\Component\Mime\Crypto\SMimeEncrypter;
-use Symfony\Component\Mime\Crypto\SMimeSigner;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Header\HeaderInterface;
 use yzh52521\mailer\exception\Exception;
@@ -52,12 +48,17 @@ class Mailer
 
 
     /**
-     * @var DkimSigner|SMimeSigner|null
+     * @var MessageSignerInterface
      */
     private $signer = null;
-    private $dkimSignerOptions = [];
 
-    private $encryptor = null;
+    /**
+     * @see https://symfony.com/doc/current/mailer.html#signing-messages
+     * @var MessageEncrypterInterface
+     */
+    private $encrypter = null;
+
+    public $signerOptions = [];
 
     private $transport = [];
 
@@ -638,57 +639,6 @@ class Mailer
 
 
     /**
-     * Returns a new instance with the specified encryptor.
-     *
-     * @param SMimeEncrypter $encryptor The encryptor instance.
-     *
-     * @return $this
-     * @see https://symfony.com/doc/current/mailer.html#encrypting-messages
-     *
-     */
-    public function withEncryptor(SMimeEncrypter $encryptor): self
-    {
-        $new            = clone $this;
-        $new->encryptor = $encryptor;
-        return $new;
-    }
-
-    /**
-     * Returns a new instance with the specified signer.
-     *
-     * @param DkimSigner|SMimeSigner|object $signer The signer instance.
-     * @param array $options The options for DKIM signer {@see DkimSigner}.
-     *
-     * @return $this
-     * @throws RuntimeException If the signer is not an instance of {@see DkimSigner} or {@see SMimeSigner}.
-     *
-     * @see https://symfony.com/doc/current/mailer.html#signing-messages
-     *
-     */
-    public function withSigner(object $signer, array $options = []): self
-    {
-        $new = clone $this;
-
-        if ( $signer instanceof DkimSigner ) {
-            $new->signer            = $signer;
-            $new->dkimSignerOptions = $options;
-            return $new;
-        }
-
-        if ( $signer instanceof SMimeSigner ) {
-            $new->signer = $signer;
-            return $new;
-        }
-
-        throw new RuntimeException(sprintf(
-            'The signer must be an instance of "%s" or "%s". The "%s" instance is received.',
-            DkimSigner::class,
-            SMimeSigner::class,
-            get_class($signer)
-        ));
-    }
-
-    /**
      * Returns a Symfony message instance.
      *
      * @return Email Symfony message instance.
@@ -723,14 +673,12 @@ class Mailer
 
             $message = $this->getSymfonyMessage();
 
-            if ( $this->encryptor !== null ) {
-                $message = $this->encryptor->encrypt($message);
+            if ( $this->encrypter !== null ) {
+                $message = $this->encrypter->encrypt($message);
             }
 
             if ( $this->signer !== null ) {
-                $message = $this->signer instanceof DkimSigner
-                    ? $this->signer->sign($message, $this->dkimSignerOptions)
-                    : $this->signer->sign($message);
+                $message = $this->signer->sign( $message,$this->signerOptions );
             }
 
             // 发送邮件

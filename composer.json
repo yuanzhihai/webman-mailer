@@ -18,7 +18,8 @@
     ],
     "require": {
         "php": ">=7.2",
-        "symfony/mailer": "^5.4.5|^6.0"
+        "symfony/mailer": "^5.4.5|^6.0",
+        "ext-fileinfo": "*"
     },
     "require-dev": {
         "workerman/webman-framework": "^1.2.1"
