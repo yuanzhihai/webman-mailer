@@ -261,8 +261,8 @@ $mailer->attachContent(fopen('/path/to/documents/contract.doc', 'r'), ['fileName
 
 ```
 消息加密
-$encryptor=new SMimeEncrypter('/path/to/certificate.crt');
-$mailer->withEncryptor($encryptor);  @see https://symfony.com/doc/current/mailer.html#encrypting-messages
+$encrypter=new SMimeEncrypter('/path/to/certificate.crt');
+$mailer->encrypter=$encryptor;  @see https://symfony.com/doc/current/mailer.html#encrypting-messages
 
 签名
 
@@ -270,8 +270,7 @@ $signer = new DkimSigner('file:///path/to/private-key.key', 'example.com', 'sf')
 or
 $signer = new SMimeSigner('/path/to/certificate.crt', '/path/to/certificate-private-key.key');
 
-
-$mailer->withSigner($signer); @see https://symfony.com/doc/current/mailer.html#signing-messages
+$mailer->signer =$signer; @see https://symfony.com/doc/current/mailer.html#signing-messages
 
 ```
 
