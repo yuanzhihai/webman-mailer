@@ -23,7 +23,7 @@ use yzh52521\mailer\exception\Exception;
  * Class Mailer
  * @package yzh52521\mailer\mail
  */
-class Mailer
+class Mailer implements MessageWrapperInterface
 {
 
     private $charset = 'utf-8';
@@ -643,7 +643,7 @@ class Mailer
      *
      * @return Email Symfony message instance.
      */
-    public function getSymfonyMessage(): Email
+    public function getSymfonyEmail(): Email
     {
         return $this->message;
     }
@@ -671,7 +671,7 @@ class Mailer
             $transportInstance->setTransport($transport);
             $mailer = $transportInstance->getSymfonyMailer();
 
-            $message = $this->getSymfonyMessage();
+            $message = $this->getSymfonyEmail();
 
             if ( $this->encrypter !== null ) {
                 $message = $this->encrypter->encrypt($message);
