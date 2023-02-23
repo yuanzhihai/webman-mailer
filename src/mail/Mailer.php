@@ -18,6 +18,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Header\HeaderInterface;
 use yzh52521\mailer\exception\Exception;
+use yzh52521\mailer\exception\InvalidArgumentException;
 
 /**
  * Class Mailer
@@ -65,7 +66,7 @@ class Mailer implements MessageWrapperInterface
 
     public function __construct($transport = [])
     {
-        $config          = config('plugin.yzh52521.mailer.app');
+        $config          = config( 'plugin.yzh52521.mailer.app' );
         $this->transport = $transport;
         $this->debug     = $config['mailer']['debug'];
         $this->from      = [$config['from']['address'] => $config['from']['name']];
@@ -109,7 +110,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function setSubject(string $subject): self
     {
-        $this->message->subject($subject);
+        $this->message->subject( $subject );
 
         return $this;
     }
@@ -143,7 +144,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function setDate(DateTimeInterface $date): self
     {
-        $this->message->date($date);
+        $this->message->date( $date );
 
         return $this;
     }
@@ -183,8 +184,8 @@ class Mailer implements MessageWrapperInterface
      */
     protected function buildFrom()
     {
-        if ( !empty($this->from) ) {
-            $this->message->from(...$this->convertStringsToAddresses($this->from));
+        if (!empty( $this->from )) {
+            $this->message->from( ...$this->convertStringsToAddresses( $this->from ) );
         }
     }
 
@@ -194,7 +195,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function getFrom()
     {
-        return $this->convertAddressesToStrings($this->message->getFrom());
+        return $this->convertAddressesToStrings( $this->message->getFrom() );
     }
 
     /**
@@ -206,7 +207,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function setTo($address): self
     {
-        $this->message->to(...$this->convertStringsToAddresses($address));
+        $this->message->to( ...$this->convertStringsToAddresses( $address ) );
 
         return $this;
     }
@@ -220,7 +221,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function addTo($address): self
     {
-        $this->message->addTo(...$this->convertStringsToAddresses($address));
+        $this->message->addTo( ...$this->convertStringsToAddresses( $address ) );
 
         return $this;
     }
@@ -231,7 +232,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function getTo()
     {
-        return $this->convertAddressesToStrings($this->message->getTo());
+        return $this->convertAddressesToStrings( $this->message->getTo() );
     }
 
     /**
@@ -242,7 +243,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function setCc($address): self
     {
-        $this->message->cc(...$this->convertStringsToAddresses($address));
+        $this->message->cc( ...$this->convertStringsToAddresses( $address ) );
 
         return $this;
     }
@@ -255,7 +256,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function addCc($address): self
     {
-        $this->message->addCc(...$this->convertStringsToAddresses($address));
+        $this->message->addCc( ...$this->convertStringsToAddresses( $address ) );
 
         return $this;
     }
@@ -266,7 +267,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function getCc()
     {
-        return $this->convertAddressesToStrings($this->message->getCc());
+        return $this->convertAddressesToStrings( $this->message->getCc() );
     }
 
     /**
@@ -276,7 +277,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function setBcc($address): self
     {
-        $this->message->bcc(...$this->convertStringsToAddresses($address));
+        $this->message->bcc( ...$this->convertStringsToAddresses( $address ) );
 
         return $this;
     }
@@ -288,7 +289,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function addBcc($address): self
     {
-        $this->message->addBcc(...$this->convertStringsToAddresses($address));
+        $this->message->addBcc( ...$this->convertStringsToAddresses( $address ) );
 
         return $this;
     }
@@ -300,7 +301,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function getBcc()
     {
-        return $this->convertAddressesToStrings($this->message->getBcc());
+        return $this->convertAddressesToStrings( $this->message->getBcc() );
     }
 
     /**
@@ -318,9 +319,9 @@ class Mailer implements MessageWrapperInterface
      * @param $value
      * @return $this
      */
-    public function addHeader($name, $value): self
+    public function addHeader($name,$value): self
     {
-        $this->message->getHeaders()->addTextHeader($name, $value);
+        $this->message->getHeaders()->addTextHeader( $name,$value );
         return $this;
     }
 
@@ -329,16 +330,16 @@ class Mailer implements MessageWrapperInterface
      * @param $value
      * @return $this
      */
-    public function setHeader($name, $value): self
+    public function setHeader($name,$value): self
     {
         $headers = $this->message->getHeaders();
 
-        if ( $headers->has($name) ) {
-            $headers->remove($name);
+        if ($headers->has( $name )) {
+            $headers->remove( $name );
         }
 
         foreach ( (array)$value as $v ) {
-            $headers->addTextHeader($name, $v);
+            $headers->addTextHeader( $name,$v );
         }
 
         return $this;
@@ -352,7 +353,7 @@ class Mailer implements MessageWrapperInterface
     public function setHeaders(array $headers): self
     {
         foreach ( $headers as $name => $value ) {
-            $this->setHeader($name, $value);
+            $this->setHeader( $name,$value );
         }
 
         return $this;
@@ -366,14 +367,14 @@ class Mailer implements MessageWrapperInterface
      * @param array $config
      * @return $this
      */
-    public function setHtmlBody(string $content, array $param = [], array $config = []): self
+    public function setHtmlBody(string $content,array $param = [],array $config = []): self
     {
         $this->html = $content;
 
-        if ( $param ) {
-            $content = strtr($content, $this->parseParam($param, $config));
+        if ($param) {
+            $content = strtr( $content,$this->parseParam( $param,$config ) );
         }
-        $this->message->html($content, $this->charset);
+        $this->message->html( $content,$this->charset );
 
 
         return $this;
@@ -398,14 +399,14 @@ class Mailer implements MessageWrapperInterface
      *
      * @return $this
      */
-    public function setTextBody(string $content, array $param = [], array $config = []): self
+    public function setTextBody(string $content,array $param = [],array $config = []): self
     {
         $this->text = $content;
 
-        if ( $param ) {
-            $content = strtr($content, $this->parseParam($param, $config));
+        if ($param) {
+            $content = strtr( $content,$this->parseParam( $param,$config ) );
         }
-        $this->message->text($content, $this->charset);
+        $this->message->text( $content,$this->charset );
 
         return $this;
     }
@@ -417,10 +418,10 @@ class Mailer implements MessageWrapperInterface
      * @param string|null $app
      * @return mixed
      */
-    private function template(string $template, array $vars = [], string $app = null)
+    private function template(string $template,array $vars = [],string $app = null)
     {
-        $handler = \config('view.handler');
-        return $handler::render($template, $vars, $app);
+        $handler = \config( 'view.handler' );
+        return $handler::render( $template,$vars,$app );
     }
 
     /**
@@ -430,15 +431,15 @@ class Mailer implements MessageWrapperInterface
      * @param string $app
      * @return $this
      */
-    public function view(string $template, array $param = [], string $app = ''): Mailer
+    public function view(string $template,array $param = [],string $app = ''): Mailer
     {
         // 处理变量中包含有对元数据嵌入的变量
         foreach ( $param as $k => $v ) {
-            $this->embedImage($k, $v, $param);
+            $this->embedImage( $k,$v,$param );
         }
-        $content = $this->template($template, $param, $app);
+        $content = $this->template( $template,$param,$app );
 
-        return $this->setHtmlBody($content);
+        return $this->setHtmlBody( $content );
     }
 
 
@@ -450,20 +451,20 @@ class Mailer implements MessageWrapperInterface
      *
      * @return $this
      */
-    public function attach(string $filePath, array $options = []): self
+    public function attach(string $filePath,array $options = []): self
     {
         $file = [];
-        if ( !empty($options['fileName']) ) {
+        if (!empty( $options['fileName'] )) {
             $file['name'] = $options['fileName'];
         } else {
             $file['name'] = $filePath;
         }
-        if ( !empty($options['contentType']) ) {
+        if (!empty( $options['contentType'] )) {
             $file['contentType'] = $options['contentType'];
         } else {
-            $file['contentType'] = mime_content_type($filePath);
+            $file['contentType'] = mime_content_type( $filePath );
         }
-        $this->message->attachFromPath($filePath, $file['name'], $file['contentType']);
+        $this->message->attachFromPath( $filePath,$file['name'],$file['contentType'] );
 
         return $this;
     }
@@ -474,22 +475,22 @@ class Mailer implements MessageWrapperInterface
      *
      * @return $this
      */
-    public function attachContent($content, array $options = []): self
+    public function attachContent($content,array $options = []): self
     {
         $file = [];
-        if ( !empty($options['fileName']) ) {
+        if (!empty( $options['fileName'] )) {
             $file['name'] = $options['fileName'];
         } else {
             $file['name'] = null;
         }
 
-        if ( !empty($options['contentType']) ) {
+        if (!empty( $options['contentType'] )) {
             $file['contentType'] = $options['contentType'];
         } else {
             $file['contentType'] = null;
         }
 
-        $this->message->attach($content, $file['name'], $file['contentType']);
+        $this->message->attach( $content,$file['name'],$file['contentType'] );
         return $this;
     }
 
@@ -502,7 +503,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function setPriority(int $priority = 1): self
     {
-        $this->message->priority($priority);
+        $this->message->priority( $priority );
 
         return $this;
     }
@@ -523,7 +524,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function setReplyTo($address): self
     {
-        $this->message->replyTo(...$this->convertStringsToAddresses($address));
+        $this->message->replyTo( ...$this->convertStringsToAddresses( $address ) );
 
         return $this;
     }
@@ -535,7 +536,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function addReplyTo($address): self
     {
-        $this->message->addReplyTo(...$this->convertStringsToAddresses($address));
+        $this->message->addReplyTo( ...$this->convertStringsToAddresses( $address ) );
 
         return $this;
     }
@@ -546,7 +547,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function getReplyTo()
     {
-        return $this->convertAddressesToStrings($this->message->getReplyTo());
+        return $this->convertAddressesToStrings( $this->message->getReplyTo() );
     }
 
     public function getReturnPath(): string
@@ -562,7 +563,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function setReturnPath(string $address): self
     {
-        $this->message->returnPath($address);
+        $this->message->returnPath( $address );
 
         return $this;
     }
@@ -580,7 +581,7 @@ class Mailer implements MessageWrapperInterface
      */
     public function setSender(string $address): self
     {
-        $this->message->sender($address);
+        $this->message->sender( $address );
         return $this;
     }
 
@@ -592,14 +593,14 @@ class Mailer implements MessageWrapperInterface
     public function getHeaders($name): array
     {
         $headers = $this->message->getHeaders();
-        if ( !$headers->has($name) ) {
+        if (!$headers->has( $name )) {
             return [];
         }
 
         $values = [];
 
         /** @var HeaderInterface $header */
-        foreach ( $headers->all($name) as $header ) {
+        foreach ( $headers->all( $name ) as $header ) {
             $values[] = $header->getBodyAsString();
         }
 
@@ -623,15 +624,15 @@ class Mailer implements MessageWrapperInterface
      * @param array $config
      * @return array
      */
-    protected function parseParam(array $param, array $config = [])
+    protected function parseParam(array $param,array $config = [])
     {
         $ret            = [];
-        $leftDelimiter  = !empty($config['tpl_begin']) ?: config('view.option.tpl_begin', '{');
-        $rightDelimiter = !empty($config['tpl_end']) ?: config('view.option.tpl_end', '}');
+        $leftDelimiter  = !empty( $config['tpl_begin'] ) ?: config( 'view.option.tpl_begin','{' );
+        $rightDelimiter = !empty( $config['tpl_end'] ) ?: config( 'view.option.tpl_end','}' );
         foreach ( $param as $k => $v ) {
             // 处理变量中包含有对元数据嵌入的变量
-            $this->embedImage($k, $v, $param);
-            $ret[$leftDelimiter . $k . $rightDelimiter] = $v;
+            $this->embedImage( $k,$v,$param );
+            $ret[$leftDelimiter.$k.$rightDelimiter] = $v;
         }
 
         return $ret;
@@ -655,43 +656,42 @@ class Mailer implements MessageWrapperInterface
      * @return bool
      * @throws \Exception
      */
-    public function send(\Closure $message = null, array $transport = []): bool
+    public function send(\Closure $message = null,array $transport = []): bool
     {
         try {
             // 匿名函数
-            if ( $message instanceof \Closure ) {
-                call_user_func_array($message, [&$this, &$this->message]);
+            if ($message instanceof \Closure) {
+                call_user_func_array( $message,[&$this,&$this->message] );
             }
 
-            if ( empty($transport) && $this->transport ) {
+            if (empty( $transport ) && $this->transport) {
                 $transport = $this->transport;
             }
 
             $transportInstance = new Transport();
-            $transportInstance->setTransport($transport);
+            $transportInstance->setTransport( $transport );
             $mailer = $transportInstance->getSymfonyMailer();
 
             $message = $this->getSymfonyEmail();
 
-            if ( $this->encrypter !== null ) {
-                $message = $this->encrypter->encrypt($message);
+            if ($this->encrypter !== null) {
+                $message = $this->encrypter->encrypt( $message );
             }
 
-            if ( $this->signer !== null ) {
+            if ($this->signer !== null) {
                 $message = $this->signer->sign( $message,$this->signerOptions );
             }
 
             // 发送邮件
             $this->buildFrom();
-            $mailer->send($message);
+            $mailer->send( $message );
             return true;
-        } catch ( TransportExceptionInterface $e ) {
+        } catch ( TransportExceptionInterface|\Throwable $e ) {
             $this->err_msg = $e->getMessage();
-            $this->debug && Log::info($e->getMessage());
-            return false;
-        } catch ( Exception $e ) {
-            $this->err_msg = $e->getMessage();
-            $this->debug && Log::info($e->getMessage());
+            if($this->debug) {
+                Log::info($e->getMessage());
+                throw new Exception($e->getMessage(),$e->getCode(),$e);
+            }
             return false;
         }
     }
@@ -735,26 +735,26 @@ class Mailer implements MessageWrapperInterface
      * @param string|array $v
      * @param array $param
      */
-    protected function embedImage(string &$k, &$v, array &$param)
+    protected function embedImage(string &$k,&$v,array &$param)
     {
         $cid = 'cid:';
-        if ( false !== strpos($k, $cid) ) {
+        if (false !== strpos( $k,$cid )) {
             $filename = 'image';
-            if ( is_array($v) && $v ) {
-                if ( !isset($v[1]) ) {
+            if (is_array( $v ) && $v) {
+                if (!isset( $v[1] )) {
                     $v[1] = $filename;
                 }
-                if ( !isset($v[2]) ) {
+                if (!isset( $v[2] )) {
                     $v[2] = null;
                 }
-                [$imgPath, $filename, $fileMime] = $v;
-                $this->message->embed($imgPath, $filename, $fileMime);
+                [$imgPath,$filename,$fileMime] = $v;
+                $this->message->embed( $imgPath,$filename,$fileMime );
             } else {
-                $this->message->embedFromPath($v, $filename);
+                $this->message->embedFromPath( $v,$filename );
             }
-            unset($param[$k]);
-            $k         = substr($k, strlen($cid));
-            $param[$k] = $cid . $filename;
+            unset( $param[$k] );
+            $k         = substr( $k,strlen( $cid ) );
+            $param[$k] = $cid.$filename;
         }
     }
 
@@ -773,7 +773,7 @@ class Mailer implements MessageWrapperInterface
             $strings[$address->getAddress()] = $address->getName();
         }
 
-        return empty($strings) ? '' : $strings;
+        return empty( $strings ) ? '' : $strings;
     }
 
     /**
@@ -785,20 +785,20 @@ class Mailer implements MessageWrapperInterface
      */
     private function convertStringsToAddresses($strings): array
     {
-        if ( is_string($strings) ) {
-            return [new Address($strings)];
+        if (is_string( $strings )) {
+            return [new Address( $strings )];
         }
 
         $addresses = [];
 
         foreach ( $strings as $address => $name ) {
-            if ( !is_string($address) ) {
+            if (!is_string( $address )) {
                 // email address without name
-                $addresses[] = new Address($name);
+                $addresses[] = new Address( $name );
                 continue;
             }
 
-            $addresses[] = new Address($address, $name);
+            $addresses[] = new Address( $address,$name );
         }
 
         return $addresses;
