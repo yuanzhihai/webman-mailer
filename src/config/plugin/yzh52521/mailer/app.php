@@ -10,7 +10,6 @@ return [
         'port'     => 465, // SMTP服务器端口号,一般为25
         'options'  => [], // See: https://symfony.com/doc/current/mailer.html#tls-peer-verification
         //'dsn'      => '',
-        'debug'    => false, // 开启debug模式会直接抛出异常, 记录邮件发送日志
     ],
     'from'   => [
         'address' => 'hello@example.com',
