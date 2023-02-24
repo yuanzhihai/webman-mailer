@@ -12,13 +12,11 @@ namespace yzh52521\mailer\mail;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use support\Log;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Header\HeaderInterface;
 use yzh52521\mailer\exception\Exception;
-use yzh52521\mailer\exception\InvalidArgumentException;
 
 /**
  * Class Mailer
@@ -38,15 +36,12 @@ class Mailer implements MessageWrapperInterface
      */
     protected $err_msg;
 
-    protected bool $debug = false;
-
     /** @var array|string 发信人 */
     protected $from = [];
 
     protected $html;
 
     protected $text;
-
 
     /**
      * @var MessageSignerInterface
@@ -68,7 +63,6 @@ class Mailer implements MessageWrapperInterface
     {
         $config          = config( 'plugin.yzh52521.mailer.app' );
         $this->transport = $transport;
-        $this->debug     = $config['mailer']['debug'];
         $this->from      = [$config['from']['address'] => $config['from']['name']];
         $this->message   = new Email();
     }
@@ -691,18 +685,6 @@ class Mailer implements MessageWrapperInterface
             throw new Exception($e->getMessage(),$e->getCode(),$e);
         }
     }
-
-    /**
-     * 设置debug
-     * @param bool $debug
-     * @return $this
-     */
-    public function setDebug(bool $debug): self
-    {
-        $this->debug = $debug;
-        return $this;
-    }
-
 
     /**
      * 获取邮件内容
