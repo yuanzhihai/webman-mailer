@@ -92,6 +92,7 @@ class Mailer implements MessageWrapperInterface
     public function setCharset(string $charset): self
     {
         $this->charset = $charset;
+
         return $this;
     }
 
@@ -316,6 +317,7 @@ class Mailer implements MessageWrapperInterface
     public function addHeader($name,$value): self
     {
         $this->message->getHeaders()->addTextHeader( $name,$value );
+
         return $this;
     }
 
@@ -485,6 +487,7 @@ class Mailer implements MessageWrapperInterface
         }
 
         $this->message->attach( $content,$file['name'],$file['contentType'] );
+
         return $this;
     }
 
@@ -547,6 +550,7 @@ class Mailer implements MessageWrapperInterface
     public function getReturnPath(): string
     {
         $returnPath = $this->message->getReturnPath();
+
         return $returnPath === null ? '' : $returnPath->getAddress();
     }
 
@@ -565,6 +569,7 @@ class Mailer implements MessageWrapperInterface
     public function getSender(): string
     {
         $sender = $this->message->getSender();
+
         return $sender === null ? '' : $sender->getAddress();
     }
 
@@ -576,6 +581,7 @@ class Mailer implements MessageWrapperInterface
     public function setSender(string $address): self
     {
         $this->message->sender( $address );
+
         return $this;
     }
 
@@ -682,7 +688,7 @@ class Mailer implements MessageWrapperInterface
             return true;
         } catch ( TransportExceptionInterface|\Throwable $e ) {
             $this->err_msg = $e->getMessage();
-            throw new Exception($e->getMessage(),$e->getCode(),$e);
+            throw new Exception( $e->getMessage(),$e->getCode(),$e );
         }
     }
 
@@ -716,7 +722,7 @@ class Mailer implements MessageWrapperInterface
     protected function embedImage(string &$k,&$v,array &$param)
     {
         $cid = 'cid:';
-        if (false !== strpos( $k,$cid )) {
+        if (str_contains( $k,$cid )) {
             $filename = 'image';
             if (is_array( $v ) && $v) {
                 if (!isset( $v[1] )) {
